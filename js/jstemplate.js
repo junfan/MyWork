@@ -1,10 +1,14 @@
+
 var JsTemplate = function() {
 
-    var reg=/\{([\d\w\.]+|@idx([\+-]\d+)?)\}/g
+    var reg=/\{([><]?[\d\w\.]+|@idx([\+-]\d+)?)\}/gm
 
-    var regSec=/\{([#^])([\d\w]+)\}(.*?)\{\/\2\}/g
+    //var condSec=/\{\?[\d\w\.]+==[\d\w]\}([\d\D]*?)/gm;
+
+    var regSec=/\{([#^])([\d\w]+)\}([\d\D]*?)\{\/\2\}/gm
 
     var idxField=/@idx([\+-]\d+)?/;
+
 
     function _JsTemplate(tpl) {
         if(tpl){
@@ -12,6 +16,9 @@ var JsTemplate = function() {
         }
     }
 
+    /**
+     * obj是一个对象
+     */
     _JsTemplate.prototype.render = function(obj) {
         return render(this._tplobj, obj);
     }
@@ -23,7 +30,7 @@ var JsTemplate = function() {
             return null;
         }
         for(var i=0;i<childNode.length;i++){
-            if(childNode[i].type=="section" && childNode[i].inverse!="^"){
+            if(childNode[i].type=="section" && childNode[i].inverse!="^" &&childNode[i].name==name){
                 childJsTpl=new _JsTemplate();
                 childJsTpl._tplobj=childNode[i];
                 return childJsTpl;
@@ -55,6 +62,7 @@ var JsTemplate = function() {
             }
 
             lastIndex = regSec.lastIndex;
+
             child.push(MatchField(match[3], match[2], match[1]));
             //恢复lastIndex
             regSec.lastIndex = lastIndex;
@@ -114,20 +122,45 @@ var JsTemplate = function() {
         }
         return data;
     }
+    var escapeMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;'
+    };
+
+    function escapeHTML(string) {
+        return String(string).replace(/&(?!\w+;)|[<>"']/g, function (s) {
+            return escapeMap[s] || s;
+        });
+    }
+
+    function getValue(tplname,value){
+        if(tplname.charAt(0)==">"){
+            return value;
+        }
+        else if(tplname.charAt(0)=="<"){
+            return unescape(value);
+        }
+        return escapeHTML(value);
+    }
 
     function render(tplObj, value,index) {
         value = value || {}
         var result = [],
             tpl = tplObj.child,
-            tpltype, bInverse, subvalue,idxMatch;
+            tpltype, bInverse, subvalue,idxMatch,fieldName,tplname;
 
         for (var i = 0, len = tpl.length; i < len; i++) {
             tpltype = tpl[i].type
-            subvalue = value[tpl[i].name]
+            tplname= tpl[i].name;
             if (tpltype == "string") {
                 result[i] = tpl[i].data;
             } else if (tpltype == "section") {
                 bInverse = (tpl[i].inverse === "^");
+                //如果没有名字，那么就是顶层的值
+                subvalue = value[tplname];
                 if (bInverse) {
                     if (!subvalue || (isArray(subvalue) && subvalue.length==0)) {
                         result[i] = render(tpl[i]);
@@ -144,17 +177,12 @@ var JsTemplate = function() {
                         }).join("");
                     }
                     else{
-                        result[i] = render(tpl[i], value[tpl[i].name]);
+                        result[i] = render(tpl[i], value[tplname]);
                     }
                 }
             } else if (tpltype == "field") {
-
-                idxMatch=idxField.exec(tpl[i].name);
-
-                if (tpl[i].name === ".") {
-                    result[i] = value;
-                } 
-                else if(idxMatch){
+                idxMatch=idxField.exec(tplname);
+                if(idxMatch){
                     index=parseInt(index,10);
                     if(isNaN(index)){
                         result[i]="{"+idxMatch[0]+"}";
@@ -163,10 +191,17 @@ var JsTemplate = function() {
                         result[i] =index-(idxMatch[1]?(-idxMatch[1]):0)
                     }
                 }
-                else if (typeof subvalue === "undefined" || subvalue === null) {
-                    result[i] = "{" + tpl[i].name + "}";
-                } else {
-                    result[i] = subvalue;
+                else{
+                    fieldName=tplname.charAt(0)==">" || tplname.charAt(0)=="<" ? tplname.substr(1) : tplname;
+                    subvalue = value[fieldName]
+                    if (fieldName === ".") {
+                        result[i] = getValue(tplname,value);
+                    } 
+                    else if (typeof subvalue === "undefined" || subvalue === null) {
+                        result[i] = "{" + tplname + "}";
+                    } else {
+                        result[i] = getValue(tplname,subvalue);
+                    }
                 }
                 //result[i]= (typeof value[tpl[i].name] === "undefined" || value[tpl[i].name]===null) ? ("{"+tpl[i].name+"}") : value[tpl[i].name];
             }
@@ -269,11 +304,24 @@ function JsTemplateTest() {
         }
     }
 
+    function testArray() {
+        var cases=[
+            ["<li>{abc}</li>",[{abc:1},{abc:2}],"<li>1</li><li>2</li>"]
+        ];
+        for (var i = 0, len = cases.length; i < len; i++) {
+            if (!assert.apply(null, cases[i])) {
+                console.log("Case " + i + " Failed:" + cases[i]);
+            } else {
+                console.log("Case " + i + "Passed:" + cases[i]);
+            }
+        }
+    }
+
     function testField() {
         var cases = [
             ["hello{sec}",
             {}, "hello{sec}"],
-            ["hello{1}", ["yes"], "helloyes"],
+            ["hello{0}", ["yes"], "helloyes"],
             ["hello{sec}",
             {
                 sec: null
@@ -297,13 +345,17 @@ function JsTemplateTest() {
             {
                 sec: "abc"
             }, "helloabcefg"],
+
             ["hello{#sec}<sec count='{count}'>{#subsec}<subsec>this is subsec {@idx+1} value is {.}</subsec>{/subsec}</sec>{/sec}",
             {
                 sec: {
                     count: 3,
                     subsec: ["brooks", "fan"]
                 }
-            }, "hello<sec count='3'><subsec>this is subsec 1 value is brooks</subsec><subsec>this is subsec 2 value is fan</subsec></sec>"]
+            }, "hello<sec count='3'><subsec>this is subsec 1 value is brooks</subsec><subsec>this is subsec 2 value is fan</subsec></sec>"],
+
+            ["test{>abc}",{"abc":'<haha'},"test<haha"],
+            ["test{abc}",{"abc":'<haha'},"test&lt;haha"]
         ];
 
 
@@ -353,6 +405,7 @@ function JsTemplateTest() {
     function testAll() {
         testSection();
         testField();
+        testArray();
         testInverse();
         testGetSection();
     }
