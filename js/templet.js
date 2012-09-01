@@ -41,7 +41,7 @@
  *
  * 4 ? 条件域的处理
  *
- * 5 . 符号的处理，
+ * 5 $ 符号的处理，
  *   对于字符串的循环情况比较有用，主要是表示当前这个数据
  *
  * 6 内置@idx属性，为数组元素在数组中的位置，从0开始，支持简单的+ - 操作，
@@ -240,19 +240,19 @@
 		return str;
     }
 
-    function JsTemplate(tpl) {
+    function Templet(tpl) {
         this._tpl = tpl;
         this._GlobalFilter = {};
     }
 
-    JsTemplate.prototype.render = function(data) {
+    Templet.prototype.render = function(data) {
         if (!this._tplObj) {
             this._tplObj = compileSection(this._tpl);
         }
         return renderImpl(this._tpl, data, this._tplObj);
     }
 
-    JsTemplate.prototype.renderArray = function(data) {
+    Templet.prototype.renderArray = function(data) {
         if (!this._tplObj) {
             this._tplObj = compileSection(this._tpl);
         }
@@ -264,7 +264,7 @@
 
     var _GlobalFilter = {};
 
-    JsTemplate.setFilters = function(obj) {
+    Templet.setFilters = function(obj) {
         for (var i in obj) {
             if (typeof i === "function") {
                 _GlobalFilter[i] = obj[i];
@@ -272,7 +272,7 @@
         }
     }
 
-    JsTemplate.clearFilters = function() {
+    Templet.clearFilters = function() {
         _GlobalFilter = null;
     }
 
@@ -353,7 +353,7 @@
     (function() {
 
         function assert(tpl, data, result) {
-            var obj = new JsTemplate(tpl);
+            var obj = new Templet(tpl);
             var iRet = (result == obj.render(data))
             if (!iRet) {
                 var rederstr = obj.render(data);
@@ -364,7 +364,7 @@
         }
 
         function assertArray(tpl, data, result) {
-            var obj = new JsTemplate(tpl);
+            var obj = new Templet(tpl);
             var iRet = (result == obj.renderArray(data))
             if (!iRet) {
                 var rederstr = obj.renderArray(data);
@@ -551,8 +551,6 @@
 
             var cases = [
 
-                [ "{?@idx>1}good{/?}", {}, "good" ],
-
                 [ "{?2>1}good{/?}", {}, "good" ],
 
                 [ "hello {?$.abc==1}haha {name} {/?}good", { abc: 1, name: "fanjun" }, "hello haha fanjun good" ],
@@ -572,7 +570,7 @@
 
         function testGetSection() {
             var tpl = "abc{#efg}hello {firstName},{secondName}!{/efg}efg";
-            var tplObj = new JsTemplate(tpl);
+            var tplObj = new Templet(tpl);
             console.log(tplObj.getSection("efg").render({
                 firstName: "brooks",
                 secondName: "fan"
