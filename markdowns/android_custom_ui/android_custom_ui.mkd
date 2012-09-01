@@ -1,0 +1,85 @@
+##Android定制UI实现步骤
+
+####为什么要定制UI
+
+由于有很多activity使用的view顶部的控件可能是差不多的，就像HTML页面里面我们有自己的
+header这样的东西，那么这个东西可能就需要我们来弄一个统一的了，但是我们的头又不是简
+单的统一的格式，里面有一些控件的样式或者文字还是有不同的，所以这里就需要有一个定制
+化的UI，然后我们可以设置这个UI的某一些自定义属性来满足不同的需求，这次我们自定义的
+这个组件是一个RelativeLayout里面包含了三个View，左边一个返回Button，右边可能有一个
+操作Button也有可能没有，然后中间有一个TextView。
+
+####下面来说一下定制的步骤
+
+1.  在Layout里面创建一个view的xml文件，然后使用Merge标签来包含子元素，这里是两个
+    Button元素以及一个Text元素。
+
+2.  新建一个java类继承一个View类，我们这里是一个RelativeLayout，然后实现这个类的
+    初始化方法，里面主要功能是根据传入的参数来设置里面的子元素
+
+    <pre>
+        public class TopBarWidget extends RelativeLayout{
+
+            public TopBarWidget(Context context, AttributeSet attrs) {
+                //super(context);
+                super(context, attrs);
+                setGravity(Gravity.CENTER);
+                //setWeightSum(1.0f);
+                
+                LayoutInflater.from(context).inflate(R.layout.top_bar_widget, this, true);
+                
+                TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TopBarWidget, 0, 0);
+                
+                String text = array.getString(R.styleable.TopBarWidget_title);
+                
+                if (text != null){
+                    ((TextView) findViewById(R.id.top_bar_title)).setText(text);
+                }
+                
+                Drawable dw=array.getDrawable(R.styleable.TopBarWidget_actionBtnImg);
+                
+                if(dw!=null){
+                    ((ImageButton) findViewById(R.id.top_bar_action)).setBackgroundDrawable(dw);		
+                }
+                
+                // TODO Auto-generated constructor stub
+            }
+
+        }
+    </pre>
+
+
+3.  在使用这个自定义方法的地方用这个类的全路径来作为标签名字，然后可以传入这个类的父类能够使用的
+    属性，然后也可以使用自定义的属性，使用自定义属性的时候需要加上自己的名字空间，自己的名字空间
+    需要在根目录里面定义，值的格式是:"http://schemas.android.com/apk/res/<your.package.root>"
+
+    <pre>
+        <com.tencent.qqcalendar.view.TopBarWidget
+            android:layout_width="fill_parent"
+            android:layout_height="68dip"
+            android:background="#333333"
+            TopBarWidget:title="@string/edit_event_title"
+            TopBarWidget:actionBtnImg="@drawable/create_ok"
+        />
+    </pre>
+
+
+
+4.  在attrs里面声明自定义的属性，比如上面的title以及actionBtnImg
+
+        <pre>
+        <declare-styleable name="TopBarWidget">
+            <attr name="actionBtnImg" format="integer"/>
+            <attr name="title" format="string"/>
+        </declare-styleable>
+        </pre>
+    
+
+这样你就可以使用你的自定义UI控件了。
+
+参考资料：
++ [定义自己的属性][define_your_own_attrs]
++ [打造可重用的组件][create_reuseable_ui_component]
+
+[define_your_own_attrs]:http://stackoverflow.com/questions/3441396/defining-custom-attrs
+[create_reuseable_ui_component]:http://developer.android.com/resources/articles/layout-tricks-reuse.html

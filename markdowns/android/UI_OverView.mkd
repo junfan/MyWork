@@ -1,0 +1,65 @@
+####UI概览
+
+android应用程序中的所有用户界面元素都是用[View]和[ViewGroup]对象组成的。一个
+[View]是一个在屏幕上面画一些东西，并且用户可以与之交互的对象。一个[ViewGroup]对
+象是包含其它[View]和[ViewGroup]对象，并且管理其子对象布局的对象。
+
+android提供了一系列的View以及ViewGroup的子类对象来让你能够完成基本的输入控制(比
+如按钮和文本输入)以及一系列的布局模型(比如线性布局和相对布局)
+
+
+#####UI布局
+
+一个APP的每个模块的用户界面都是通过一个层级的View以及ViewGroup对象来定义的，就像
+下图一样。每个ViewGroup是一个不可见的容器，包含着子View，View可以是输入控件或者
+其它绘制其它UI部分的组件。这个层级树可简单可复杂(简单的层级会有更好的性能)
+
+![UI层级结构图][view-group-hierarchy]
+
+
+为了声明布局，你可以在代码中实例化View对象，然后开始构造一颗这样的树，当然最简单
+和有效的方式是在XML文件中定义他们。XML提供一种可读的结构让人来声明布局，就像HTML
+语言一样。
+
+一个View对应的XML元素的名字与Android中对应的对象的名字类似。所以一个TextView元素
+创建一个TextView对象，一个LinearLayout元素创建一个LinearLayout布局。
+
+比如，一个简单的包含一个TextView和一个Button的垂直布局会如下声明
+
+	<?xml version="1.0" encoding="utf-8"?>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				  android:layout_width="fill_parent" 
+				  android:layout_height="fill_parent"
+				  android:orientation="vertical" >
+		<TextView android:id="@+id/text"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:text="I am a TextView" />
+		<Button android:id="@+id/button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="I am a Button" />
+	</LinearLayout>
+
+
+当你加载一个布局资源到你的应用中的时候，android会在运行时初始化这个布局中的每一个节点，你可以定义额外的行为，查询对象的状态以及修改这个布局。
+
+如果想看一个更加完整的UI布局的指南，可以参考[XML Layouts]
+
+#####UI组件
+
+You don't have to build all of your UI using View and ViewGroup objects. Android provides several app components that offer a standard UI layout for which you simply need to define the content. These UI components each have a unique set of APIs that are described in their respective documents, such as Action Bar, Dialogs, and Status Notifications.
+你可以不用自己从头创建所有的View和ViewGroup对象，android自己提供了一些应用组件，
+他们能够提供标准的UI布局，你可以用他们简单地定义你所需要的内容。这些UI组件自己都
+有一组独特的APIS，在它们各自的文档中都可以找到，比如[Action Bar]，[Dialogs]以及
+[Status Notification]
+
+[View]:http://developer.android.com/reference/android/view/View.html
+[ViewGroup]:http://developer.android.com/reference/android/view/ViewGroup.html
+[view-group-hierarchy]:http://developer.android.com/images/viewgroup.png "UI层级结构图"
+[XML Layouts]:http://developer.android.com/guide/topics/ui/declaring-layout.html
+[Action Bar]:http://developer.android.com/guide/topics/ui/actionbar.html
+
+[Dialogs]:http://developer.android.com/guide/topics/ui/dialogs.html
+[Status Notification]:http://developer.android.com/guide/topics/ui/notifiers/notifications.html
+

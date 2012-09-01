@@ -1,0 +1,186 @@
+由于从事的是web前端开发工作，所以经常接触到一些设计好的网页或者设计稿，由于公司
+的政策是细分各个岗位的工作，所以我们也只能接触，但是却没有机会在工作中学习到什么
+。而自己现在偶尔想做一个网页的时候发现，纯从html写出来的东西是没有如何美感的，只
+是一些冰冷的控件，没有任何设计感，所以想这个东西是不是也可以自学一下。然后就很自
+然的在google里面搜索了一下“如何自学平面设计”，然后出来的结果一般都是一些问答网站
+给出的一些比较粗略的信息。归总一下大概就是这么几条：
+
+1.	学习理论知识，美术基础，色彩感知以及运用
+2.	学习软件操作，包括Photoshop（位图）以及Ilustrator（矢量图）
+3.	借鉴别人的作品，模仿别人的设计，来做一些小的实践
+4.	多多浸淫设计类网站，观摩他人作品，来提高设计理念
+5.	最重要的是需要有兴趣，能够持之以恒，因为设计这种东西不像数学什么的具体问题，
+	一学就会
+
+平面设计，英文里面叫做*Graphic Design*，于是上google又搜索了一把，果然好多文章，
+比如这篇[teach yourself graphic design]，教我们如何自学平面设计；还有这篇
+[graphic design tutorials],宣称是不需要去设计类学校来学习平面设计。这里大概就算
+小翻译一下[teach yourself graphic design]。
+
+===自学图形设计：一个自学课程的大纲
+
+幸亏是在互联网时代，我们不一定需要上设计学院才能成为一个平面设计师。在平面设计历
+史，理论以及工具的实践方面有好的基础能够帮你旗开得胜（hit the ground running)。
+有很多资源能够帮助你自学平面设计。首先不要把期望定的太高，因为需要热情地学习数年
+才能有所成。虽然有时候很难，但是只要有毅力，还是可以成功的。
+
+如果你想从头开始自学平面设计，这篇文章列出了很多非常不错的资源，能够帮助你开始你
+的设计学习之路。当然，即使你也参加了设计学校，大概也有3/5的时间是通过自学来完成
+的。让我们来开始吧！
+
+
+====1 理解平面设计的原则和理论
+有一些原则会影响你以后的每一个设计。概念化地理解这些原则以及学习如何去在实际中运
+用它们会帮助你构建你的设计学习的基础。让我们来看看在这些基础方面你应该学习什么吧
+。
+
+![设计原则][pic_principles]
+
+=====形状，空白以及韵律(rhythm)
+我记得第一次学习这些[basic design principles]的时候，它们是如此的陌生。我花了好
+一些时间来适应这些技术。在学校我们开始一个画三角形的新手项目，只是通过如何放置，
+设计形状以及空白。如下是一些很不错的关于这些原则的资源。
+
++ [The Principles of Design] by Joshua David McClurg-Genevese
++ [What is Graphic Design? Overview, Basics of Design Principles, and Design Elements]
+
+=====*颜色*，*质感*以及*形象*
+理解颜色理论的基础对于与颜色一起工作是非常重要的。颜色能够让某个设计的区块跳脱出
+平面，或者淡入到背景。*质感*的运用能够增强设计感。在印刷设计中*质感*可以产生纸张
+或者其它材料的感觉。*形象*也能够与质感协调并通过颜色来承载。学习如何平衡这些元素
+是一个微妙的技艺，这些需要一些实践才能运用好。这里有一些资源教你如何使用*颜色*，*质感*以及*形象*：
+
++ [Principles of Color Design] by Wucius Wong
++ [Texture in Graphic Design]
++ [The Basics of Graphic Design]
+
+=====*字体*
+运用*字体*的能力是平面设计与其它视觉专业区别的一点。平面设计中很大一部分的是如何理解印刷样式，开发你关于字体的知识，并且学习如何把它们运用到你的设计中。这需要你在你的职业生涯中需要固定学习的一部分。这些是一个在字体方面的一些很好的资源：
+
++	[Stop Stealing Sheep & Find Out How Type Works] by Erik Spiekermann and E.M Ginger
++	[Typography Workbook: A Real-World Guide to Using Type in Graphic Design] by Timothy Samara
++	[A Typographic Workbook: A Primer to History, Techniques, and Artistry] by Kate Clair and Cynthia Busic-Snyder
++	[Thinking with Type: A Critical Guide for Designers, Writers, Editors, & Students] by Ellen Lupton
+
+
+====2 站在平面设计的历史基础之上
+Philip Meggs的书(如下)是没一个平面设计师必备的。你应该一页一页地阅读。在你花时间
+来研究你最感兴趣的领域的时候，你至少应该选择三个领域来尽全力仔细地学习。对我来说
+一个最感兴趣的领域是[Bauhaus]，一个始建与二十世纪初的平面设计与技术学院。我发现
+它很迷人，可能是因为它结合了很多我感兴趣的东西：艺术，设计，历史以及教育。
+
++	[Meggs’ History of Graphic Design] by Philip B. Meggs and Alston W. Purvis
++	[History of Graphic Design]
+
+
+====3 理解概念化平面设计流程，解决方案，真实世界的经历以及创造性地应用。
+
+平面设计师解决的是视觉上没的问题。自学平面设计的关键是理解如何解决一个视觉上面的
+问题。这意味着你将会从解决设计的一些细节获益。你将会通过解决一些假设的设计问题入手来应用你学到的技巧，直到你和客户一起来解决真实世界的问题。
+
+![desing process][desinge_process]
+
+=====视觉以及概念化问题的解决
+视觉以及概念化问题解决是我们作为平面设计师的核心问题。客户找我们的时候表示他们有
+一个问题需要解决。一个新的公司可能需要进入一个特定的市场然后过来找你设计一个完备
+的个性化的方案。或者如果你在一个报社工作，你需要在最后期限之前给出一个排版的方案
+。问题是无止境的，你的工作就是就是解决它们。
+
+什么是一个视觉的概念？这个不止是一个纯的视觉方案。它是一个设计与创意的结合，它会
+被放到一个情境之中来解决一个问题。比如我们拿logo来举例，它是一个代表一个公司理念
+的视觉符号，它将会展示来标记一个公司的身份，市场以及历史。让我们来看看一些能够开
+发你的视觉化以及概念化问题解决技巧的资源吧。记住，通过练习你的技巧能够帮助你简历
+视觉问题解决技巧。
+
++	[Visual Literacy: A Conceptual Approach to Graphic Problem Solving] by Judith Wilde and Richard Wilde
++	[Graphic Design: The New Basics] by Ellen Lupton and Jennifer Cole Phillips
+
+
+=====设计的流程
+学会研究创造一些小东西，提炼草图，在程序中实现视觉方案，最后展示给客户是设计流程
+中基本的部分。每一个设计的子过程都可能会有不同的过程，你自己的设计方法或者你工作
+的公司在产品环境有一些独特的方式。尽管如此，基础的东西还是一样的。熟悉设计从
+头到尾的整个流程，然后在每个项目的每个子流程中你会变得更快更好。
+
++	[Design Evolution: A Handbook of Basic Design Principles Applied in Contemporary Design] by Tim Samara
++	[My logo design process] by David Airey
++	[The Role of Sketching in the Design Process] by Sean Hodge
+
+=====真实世界的应用
+一个名片，或者一个画布，都有边界。一本书也有特定的纬度以及印刷技术的局限。这些类
+型的实践以及技术局限性也是在实践平面设计中的一个重要部分。在工作中通过这些项目学习这些技术并且构建起自己的知识体系。通过一个完成一个印刷的大项目来学些关于印刷的很多东西。记住，有创意的解决方案通常是内建的创造性环境驱动的。平面设计中有趣的一部分是通过有创意的方案来解决技术问题。
+
+    [Working Within Limitations to Achieve Great Designs] by Sean Hodge
+    [Basic vs Applied Research in Graphic Design] by Michael Kroeger
+
+====4 考虑高阶的学习与发展
+高级的学习能够为设计师带来很多不同的道路。你可能会对相关的领取感兴趣，然后把自己
+的平面设计学习往那个领取去套用。当然，每个平面设计师都可以通过高级的学习以及计划
+收益。
+
+当然，你在如何平面设计的主题上面的学习的深度是没有限制的。方格理论，图形信息设计
+，职业规划让自己集中在某些领域。当然你也可以在其它领域走深入。
+
+=====方格理论
+很多平面设计的方法与基于方格的设计冲突。很多时候，方格理论是空白，流以及韵律的高
+级原则，即使是应用到实际的项目中，比如布局一整个的书本以及网站。让很多多页的文档
+放在一起也可以通过方格，因为这让设计看起来很紧密。如下是一些资源
+
++	[Grid Systems: Principles of Organizing Type] by Kimberly Elam
++	[Making and Breaking the Grid: A Graphic Design Layout Workshop] by Timothy Samara
+
+=====图形信息设计
+很多图形信息设计原则与图形设计原则是类似的，它采用一种更加技术以及实际的方法来解
+决视觉问题。相比盯着警示牌上面的一个概念，一个图形信息设计师可能会分析采用一个适当的字体来让40公里/小时的人有着最大的影响。这是前沿科学研究以及应用到视觉设计中的一个例子。Edward Tufte写过大量关于这个主题的书，我推荐所有他写的书。它们都写的非常优雅，这个书的排版也很漂亮，原则的教授有很强也很有说服力的例子
+
++	[The Work of Edward Tufte]
++	[Envisioning Information] by Edward Tufte
+
+=====规划你的职业
+花一点时间熟悉平面设计的前景以及自己的职业。平面设计是一个很大的学科，与它直接相
+关的工作很多。学习潜在的一些领域能够帮助你决定你想要集中在哪个地方。你可能被印刷
+设计，广告，界面设计或者其它的平面设计相关专业所吸引。
+
++	[Graphic Design: A Career Guide Edited] by Sharon Helmer Poggenpohl
++	[25 Graphic Design Career Preparation Tips]
++	[Becoming a Graphic Designer: A Guide to Careers in Design, 2nd Edition] by Steven D. Heller, Teresa Fernandes, and Steven Heller
+
+
+[Graphic Design: A Career Guide Edited]:http://www.aiga.org/content.cfm/guide-careerguide
+[25 Graphic Design Career Preparation Tips]:http://www.youthedesigner.com/2008/10/08/25-graphic-design-career-preparation-tips/
+[Becoming a Graphic Designer: A Guide to Careers in Design, 2nd Edition]:http://www.amazon.com/gp/product/047117677X?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=047117677X
+
+[The Work of Edward Tufte]:http://www.edwardtufte.com/tufte/
+[Envisioning Information]:http://www.edwardtufte.com/tufte/books_ei
+
+
+
+[Making and Breaking the Grid: A Graphic Design Layout Workshop]:http://www.amazon.com/gp/product/1592531253?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1592531253
+[Grid Systems: Principles of Organizing Type]:http://www.amazon.com/gp/product/1568984650?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1568984650
+	
+[Basic vs Applied Research in Graphic Design]:http://www.mkgraphic.com/basic.html
+[Working Within Limitations to Achieve Great Designs]:http://psd.tutsplus.com/tutorials/designing-tutorials/working-within-limitations-to-achieve-great-designs/
+
+[teach yourself graphic design]:http://psd.tutsplus.com/articles/inspiration/teach-yourself-graphic-design-a-self-study-course-outline/
+[graphic design tutorials]:http://desktoppub.about.com/od/graphicdesign/Graphic_Design_Tutorials.htm
+[basic design principles]:http://desktoppub.about.com/od/designprinciples/Principles_of_Design.htm
+[The Principles of Design]:http://www.digital-web.com/articles/principles_of_design/
+[What is Graphic Design? Overview, Basics of Design Principles, and Design Elements]:http://www.allgraphicdesign.com/whatisgraphicdesign.html
+[Principles of Color Design]: http://www.amazon.com/gp/product/0471287083?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0471287083
+[Texture in Graphic Design]:http://graphicdesign.about.com/od/elementsofgooddesign/a/texture.htm
+[The Basics of Graphic Design]:http://www.online.tusc.k12.al.us/tutorials/grdesign/grdesign.htm
+[Stop Stealing Sheep & Find Out How Type Works]:http://www.amazon.com/gp/product/0201703394?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0201703394
+[Typography Workbook: A Real-World Guide to Using Type in Graphic Design]:http://www.amazon.com/gp/product/1592533019?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1592533019
+[A Typographic Workbook: A Primer to History, Techniques, and Artistry]:http://www.amazon.com/gp/product/0471696900?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0471696900
+[Thinking with Type: A Critical Guide for Designers, Writers, Editors, & Students]:http://www.amazon.com/gp/product/1568984480?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1568984480
+[Bauhaus]:http://en.wikipedia.org/wiki/Bauhaus
+[History of Graphic Design]:http://www.designhistory.org/
+[Meggs’ History of Graphic Design]:http://www.amazon.com/gp/product/0471699020?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0471699020
+[Visual Literacy: A Conceptual Approach to Graphic Problem Solving]:http://www.amazon.com/gp/product/0823056201?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=0823056201
+[Graphic Design: The New Basics]:http://www.amazon.com/gp/product/1568987706?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1568987706
+[Design Evolution: A Handbook of Basic Design Principles Applied in Contemporary Design]:http://www.amazon.com/gp/product/1592533876?ie=UTF8&tag=psdtuts-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=1592533876
+[My logo design process]:http://www.davidairey.com/my-logo-design-process/
+[The Role of Sketching in the Design Process]:http://psd.tutsplus.com/tutorials/drawing/the-role-of-sketching-in-the-design-process/
+
+[pic_principles]:http://vectortuts.s3.amazonaws.com/articles/article_graphic-design_self_taught_stuff_you_should_know/principles.jpg
+[desinge_process]:http://vectortuts.s3.amazonaws.com/articles/article_graphic-design_self_taught_stuff_you_should_know/solutions.jpg

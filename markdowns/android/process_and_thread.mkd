@@ -1,0 +1,198 @@
+##Android进程和线程
+
+当程序未启动时，如果一个程序的组件启动时，系统会为这个程序分配一个Linux进程并有一个主线程。
+默认所有的组件都是在同一个进行和主线程里面运行的，当一个组件打开的时候这个程序
+已经启动了一个进程，这个组件也会在已经启动的进程里面运行，当然，我们设置可以让不同
+的组件在单独的进程中运行，在每个进程中也可以创建额外的线程。
+
+
+####进程
+组件默认都是在程序的主进程中运行的，当然也可以在manefest文件中修改组件属于哪个进程。在manifest
+文件中，四个组件activity,services,reciver,provider的标签都有一个android:process的属性可以设置，这
+样可以把不同的组件设置到不同的进程中，当然你也可以设置不同程序中的组件运行到一个process中，这要求
+这些程序有相同的Linux User Id以及一样的签名。
+
+application标签也支持android:process属性设置，这样可以设置程序的默认进程。
+
+进程可能会在资源比较紧张的时候被kill，在这个进程中的所有组件都会被销毁，如果这些组件重新打开的
+时候，会重新创建需要的进程
+
+android系统关闭进程的时候是根据运行的process里面组件的重要性来决定的，比如在这个进程里面有activity是
+目前对用户可见的，这种进程可能就比进程里面的activity都不可见来得重要
+
+#####进程的生命周期
+android系统尽可能长地保持一个程序进程，但是为了新的或者更加重要的进程分配内存，
+会移除一些旧的进程。决定一个进程是被保留还是被傻死，系统把进程分配进一个重要级别
+分级系统，重要度基于运行在这个进程中的组件以及组件的状态。为了恢复某些系统资源，
+最不重要的进程会首先被移除，然后移除次最不重要的。
+
+一共有五个重要级别，下面按照重要等级排列了不同的进程，最上面的重要级别越高。
+
+######前台进程
+
+-	前台进程是指用户正进行操作的时候必须存在的进程。一般有如下五个点的进程是认为是前台进程的：
+	+	包含了一个正在与用户交互的activity(activity的onResume方法已经调用)
+	+	包含了一个与用户正在交互的activity绑定的service
+	+	包含了一个在前台运行的service(service调用了startForeground())
+	+	包含了一个正在执行onCreate/onStart/onDestroy方法的service
+	+	包含了正在执行onReceive方法的BroadcastReceiver
+    
+    通常来说，在任意时段只有少数前台进程，前台进程只有当内存非常低的时候才会被杀死，一般来说那个时候设备
+    到达内存换页的状态，所以杀死一些前台进程为了让界面可以响应用户操作。
+
+######可见进程
+
+-	一个进程不包含前台进程但是在用户屏幕上面还是可见的叫做可见进程，如果一个进程有如下特征被认为是可见的：
+	+	进程包含了一个非前台的activity，但是activity对于用户来说是可见的(onPause方法调用了)，比如弹出对话框的时候可能会有这种情况
+	+	进程包含了一个绑定到可见activity上面的service
+
+######服务进程
+
+-	service进程，一个进程正在运行一个启动了的service(通过startServie方法运行)并且不在上面两个等级，也就是说没有绑定到任何一个前台
+    进程里面，比如播放音乐的这种service
+
+######后台进程
+
+-	后台进程，一个进程包含了不被用户看见的activities(onStop方法已经调用了)，进程与用户体验没有直接的关联，系统会在如何时候把他们杀死
+    当然同时可能有很多个后台进程，他们会被保持在一个最近使用的队列中，如果一个activity正确实现了生命周期的方法，并且保存了当前的状态
+    进程被杀死是不会影响用户体验的，当用户跳回到这个activity的时候，activity再恢复它的可见状态。可以在activity文档里面查看如何保存和
+    恢复状态。
+
+######空进程
+
+-	空进程，一个没有包含如何激活的应用组件的进程。这种进程存在的唯一理由是作为缓存来提高进程启动的时间。系统经常会杀死这些进程来平衡
+    整个系统的缓存与底层内核缓存。
+
+
+进程的分级会按照能够划分的最高级别来，除此之外，一个进程的等级可能会因为其它进程依赖于它而变得更加高。
+
+因为一个服务进程比后台进程等级要高，所以一个activity如果要初始化一个长的操作，新启一个服务进程可能会比较好。比如一个activity上传
+一个图片到网站，它应该启动一个服务来进行这个操作，当用户离开这个活动的时候，服务也可以在后台运行。使用服务能够保证操作起码会在服
+务进程级别，不管activity是什么级别。这也是broadcast receivers应该雇佣服务来做耗时操作的原因。
+
+####线程
+当一个应用程序运行的时候，系统为这个程序创建一个执行线程，叫做"主(main)线程"，这个线程非常重要因为它负责分发事件到合适的用户界面，以及
+重绘事件。同样这个进程也会与Android UI Toolkit进行交互。所以主线程也叫做UI线程。
+
+系统不会为每个组件创建一个额外的线程。所有在同一个进程中运行的组件都是在主线程中初始化的，然后对于组件的调用也是从主线程分发的。同时
+对于系统事件的回调(比如onKeyDown()或者一个生命周期的回调)，也是在主线程中运行的。
+
+比如用户触摸了一个屏幕上面的按钮的时候，主线程把触摸事件分发到相应的界面元素，这个界面元素会设置它的按键状态并且让时间队列把这个事件
+失效。主线程dequeue这个请求，然后让界面元素去重绘自己。
+
+当你的应用有很多密集的与用户交互的工作，这种单线程的模式会导致很差的体验除非你正确地实现你的程序。特别，如果所有事情都在主线程里面
+长时间操作比如网络访问，数据库访问会把这个UI卡住。当线程卡住的时候，所有事件都不会被分发，重绘事件也不会被分发。从用户的角度来说，这个
+程序会看起来卡住了。最坏的情况是UI线程卡超过5秒钟用户就会收到应用程序看起来无相应的对话框，然后用户会把应用程序关掉，然后把你的应用
+卸载了。
+
+除此之外，Android UI tookie不是线程安全的。所以你一定不要从一个工作的线程中操作你的UI，你应该在你的UI线程中做所有的操作。所以，android的
+单线程模式有两个简单的原则：
+
++	不要阻塞UI线程
++	不要在其它线程中操作UI控件元素
+
+#####工作线程
+正因为单线程模型对于程序UI的响应性很重要。如果有些操作不是即使的，可以使用后台线程或者工作线程来完成，比如如下就是在一个click监听器中新建
+一个线程来下载图片并显示出来的操作。
+
+    public void onClick(View v) {
+        new Thread(new Runnable() {
+            public void run() {
+                Bitmap b = loadImageFromNetwork("http://example.com/image.png");
+                mImageView.setImageBitmap(b);
+            }
+        }).start();
+    }
+    
+起初，这样看起来工作的很好，因为它创建了一个新的线程来操作网络。但是，它违背了第二条原则，就是UI操作只在主线程里面做，这里它从另外的线程改变了
+ImageView。这个可能会导致未定义以及不符合预期的行为，并且让跟踪比较麻烦以及费时
+
+为了解决这个问题，android给出了几种线程间互相访问的机制。下面是一些例子
+
++	Activity.runOnUiThread(Runnable)
++	View.post(Runnable)
++	View.postDelayed(Runnable, long)
+
+例如，你可以这样fix上面的那个问题
+    
+    public void onClick(View v) {
+        new Thread(new Runnable() {
+            public void run() {
+                final Bitmap bitmap = loadImageFromNetwork("http://example.com/image.png");
+                mImageView.post(new Runnable() {
+                    public void run() {
+                        mImageView.setImageBitmap(bitmap);
+                    }
+                });
+            }
+        }).start();
+    }
+
+这样这个实现就是线程安全的了，网络操作完成的时候，让UI线程来设置ImageView
+
+尽管如此，操作的复杂性变高了。这种代码很容易变得非常难维护。为了能够与一个工作线程进行交互，你可以考虑在工作线程中使用Handler
+来处理UI线程中的消息。最好的解决方案是扩展AsyncTask类，这让工作线程任务与UI交互的执行变得简单。
+
+#####使用AsyncTask
+
+AsyncTask让你的UI可以执行异步的工作。它在一个工作线程中执行可能会让UI卡住的操作，然后把结果返回给UI线程，而不需要你去关系线程以及
+Handlers
+
+如果要这样，你必须实现一个AsyncTask的子类，并且实现doInBackground方法，它会在一个后台线程池中运行。需要update你的UI的时候，你应该
+实现onPostExecute()，它会分发doInBackground这个方法的结果，并且在UI线程中执行，所以你可以安全地更新你的UI。然后你可以在UI线程中调
+用execute方法。
+
+比如你可以这样实现你上面的内容:
+
+    public void onClick(View v) {
+        new DownloadImageTask().execute("http://example.com/image.png");
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        /** The system calls this to perform work in a worker thread and
+         * delivers it the parameters given to AsyncTask.execute() */
+        protected Bitmap doInBackground(String... urls) {
+            return loadImageFromNetwork(urls[0]);
+        }
+
+        /** The system calls this to perform work in the UI thread and delivers
+         * the result from doInBackground() */
+        protected void onPostExecute(Bitmap result) {
+            mImageView.setImageBitmap(result);
+        }
+    }
+
+现在UI是安全的了，并且代码比较简单，因为它分离了在工作线程以及UI线程中各自的工作，让代码变得更加简单。
+    
+你可以在AsyncTask的文档中去了解如何使用这个类，这里快速列一下它的工作原理：
+
++	你应该声明参数的类型，任务的进度值，最后值
++	doInBackground方法自动的在一个工作线程中运行
++	onPreExecute, onPostExecute, onProgressUpdate都是在UI线程中执行的
++	doInBackground的返回值会被发送到onPostExecute
++	你可以在doInBackground方法中任何时候调用publishProgress，来执行UI线程中的onProgressUpdate方法
++	你可以在任何线程如何时候取消这个任务
+
+#####线程安全方法
+    
+在一些情况下，你实现的方法可能会被超过一个线程调用，所以必须用线程安全的方式去写。
+
+这主要针对能够被远程调用的方法来说，比如在一个绑定的service中的方法。当对实现了IBinder接口的调用与IBinder运行的进程相同的时候，这个方法
+会在调用者的线程中运行。但是，如果调用者在另外一个进程，这个方法会选择IBinder所在进程的线程池中选择一个线程来执行。比如一个方法的onBind
+方法可能会被这个service进程的UI线程调用，onBind返回的对象中的方法实现会在线程池中的一个线程来窒息。因为一个服务可能会超过一个客户端，多
+个线程可以handle相同的IBinder方法。IBinder方法必须实现为线程安全的。
+
+同样的，一个content provider可以接收来自其它进程的调用。尽管ContentResolver和ContentProvider类隐藏了跨进程通讯的细节，ContentProvider方法
+对于query,insert,delete,update和getType的响应也是在一个线程池中的线程来运行的，因为这些方法会被多个线程调用，所以他们应该也实现为线程安全
+的
+
+
+#####跨进程通信
+
+Android提供一种通过RPC调用的方式来实现跨进程通信，一个方法可以被其它程序的组件调用，但是在其它程序中远程执行，有结果会返回给调用者。这实
+现了解构一个方法调用以及参数操作系统理解的程度，然后从本地的进程地址空间转移到远程地址空间，远程地址空间解构这个调用并且执行。然后调用结
+果会沿着相反的方向来流动。android提供能够进行这种IPC的功能，所以你就专注与定义以及实现你的RPC接口即可。
+
+为了运行IPC，你的程序必须使用bindService方法绑定到一个service上面，可以从服务开发指南中找到更多信息
+
+[process thread url]:http://developer.android.com/guide/topics/fundamentals/processes-and-threads.html

@@ -1,0 +1,92 @@
+<h4>nginx配置要点</h4>
+<p>本文章参考主要参考<a href="http://blog.martinfjordvald.com/2010/07/nginx-primer/">Nginx Primer</a></p>
+<h4>前言</h4>
+<p>nginx首先是一个反向代理，然后才是一个HTTP服务器，所以它没有一个文件的概念。nginx的配置文件是一个继承的结构，高层次声明的一些条目会被低层级的声明块所过滤，如果低层级配置没有相应值，高层级的配置可以作为他们的默认值，这样的话在低层级的条目里面就可以把这些默认值覆盖。 一般分为三个层级 http块，server块，以及location块，除此之外还有一个event块 (event-block)以及存放event块和http块的root块。server块的语义就是Apache里面的一个服务器，location块就是Apache里面的一个URI</p>
+<h4>虚拟主机(Virtual Host)</h4>
+<p>虚拟主机主要是通过HTTP请求里面的HOST字段来标识让哪个配置来处理，这样不同的域名指向同一个IP的时候，由于域名不同，所以可以路由到不同的配置。比如下面这个配置</p>
+<pre><code>server {
+  listen          80;
+  server_name     domain.com *.domain.com;
+  rewrite ^       http://www.domain.com$request_uri? permanent;
+ }
+
+server {
+  listen          80;
+  server_name     www.domain.com;
+
+  index           index.html;
+  root            /home/domain.com
+}
+</code></pre>
+<p>这个配置中我们有两个虚拟主机配置，如果是domain.com或者是除www.domain.com之外的子域名HOST都走第一个配置，www.domain.com走第二个配置</p>
+<p>我们也可以配置一个默认的虚拟主机来处理所有没有匹配到其它虚拟主机的请求，我们可以在<em>listen</em>后面加一个<em>default_server</em>的标志，这个会让所有没有HOST字段的请求或者HOST字段没有与任何虚拟主机匹配的请求都让这一个虚拟主机来处理。比如直接通过IP访问(没有host字段)，或者通过一些随机域名访问你的服务器IP的请求。<em>server_name _;</em> 表示没有其它server_name匹配的情况</p>
+<pre><code>server {
+  listen          80 default_server;
+  server_name     _;
+
+  index           index.html;
+  root            /var/www/default
+}
+</code></pre>
+<h4>位置(Location)</h4>
+<p>nginx不使用复杂的rewrite机制，通常通过Location快来配置，值得注意的是一个请求最多只会进入一个Location模块，如果你配置了两个Location，一个是<em>/</em>，另外一个是<em>/forum</em>，那么如果一个链接是http://www.host.com/forum只会进入到 <em>/forum</em> 的 Location里面的配置 <em>/</em> 里面的配置对这个请求不生效。还有一个需要注意的是，nginx会通过<em>server_name</em>最精准的那一个server配置来匹配请求，具体内容可以参考[location directive wiki entry]如下是一个例子，通过位置配置把指向<em>/forum</em> 的链接都切换到一个子域名</p>
+<pre><code>server {
+  listen          80 default;
+  server_name     www.domain.com;
+
+  root            /home/domain.com
+
+  # This will match any URI beginning with /forum
+  location /forum {
+    # We capture the URI and redirect it to the subdomain.
+    rewrite forum(.*) http://forum.domain.com$1 permanent;
+  }
+}
+
+server {
+  listen          80;
+  server_name     forum.domain.com;
+
+  index           index.php;
+  root            /home/domain.com/forum;
+}
+</code></pre>
+<h4>处理PHP请求</h4>
+<p>PHP以及其它后端的真实处理的服务器一般都通过Location来进行转发，也就是说我们可以通过定义一个location块来处理所有PHP请求。由于location都是通过正则匹配来进行的，所以有可能发过去之后PHP文件并不存在，所以下面这个配置里面有一个<em>try_files</em>规则来匹配静态文件。</p>
+<pre><code>server {
+  listen          80;
+  server_name     forum.domain.com;
+
+  index           index.php;
+  root            /home/domain.com/forum;
+
+  location ~* \.php$ {
+    # I include this in http context, it's 
+    #just here to show it's required for fastcgi!
+    include fastcgi.conf 
+    try_files $uri =404;
+    fastcgi_pass 127.0.0.1:9000;
+  }
+}
+</code></pre>
+<h4>最后一步</h4>
+<p>虽然上述的配置可以工作，但是我们还需要提供给搜索引擎更加友好的方式。通常这种配置包含一系列的rewrite，但是在nginx里面，我们只需要加一行。</p>
+<pre><code>server {
+  listen          80;
+  server_name     forum.domain.com;
+
+  index           index.php;
+  root            /home/domain.com/forum;
+
+  location / {
+    try_files       $uri $uri/ /index.php;
+  }
+
+  location ~* \.php$ {
+    include fastcgi.conf 
+    try_files $uri =404;
+    fastcgi_pass 127.0.0.1:9000;
+  }
+}
+</code></pre>
+<p>这个配置加的location是首先尝试uri文件本身，最后尝试uri/把它作为一个文件来访问，到最后还找不到就把它重定向到/index.php</p>

@@ -1,0 +1,66 @@
+####增强vim markdown插件
+由于最近经常使用markdow写blog，你也知道，能用markdow写blog的人肯定不能用一般的编
+辑器，起码是Vim，再牛的就可以用Emacs了，哥用Vim也不是一天两天了，所以在这里装一
+下B大家不要介意了。但是用Vim开着大屏幕的Gvim有没有发现写Blog的时候脖子很疼，就是
+你从左边写到右边的时候发现你的脖子也要跟着从左边扭到右边，然后哥就不得不做一个找
+一个方法来解决这个问题不，首先就是在ftplugin/markdow.vim里面修改一下在设置，当文
+字达到80个字符宽度的时候自动折行，然后听说中文还要加上一个*fo+=m*，所以哥也加上
+了
+
+
+	setlocal textwidth=80
+	setlocal formatoptions+=tcqlnm
+
+接下来在插件需要自动卸载的时候为了不污染全局变量，需要把下面之前的设置恢复一下，
+由于哥只加了textwidth，所以加一个*tw< *就OK了
+
+	let b:undo_ftplugin .= "|setl cms< com< fo< tw<"
+
+写到这里哥就觉得markdown的语法文件没有写的很好撒，我在源代码里面有一个下划线，
+它居然把它当成一个*em*标记让我这里变成斜体了。
+
+####修复中文换行变空格问题
+
+接下来哥肯定是重新启动一下vim撒，然后发现果然写到80个字的时候就自动换行了，但是
+我们知道这个自动换行是会自己增加一个*\n*到你的代码中间的，这个用markdown转换为
+html然后用浏览器查看的时候会发现之前的*\n*在两个中文字中间会增加一个空格，哥第一反应
+就是去网上找和哥一样龟毛的人，果然然后有个人也发现了这个问题，然后他就在
+[stackoverflow]上面发了一个帖子问为什么html会把一个*\n*展示为一个空格，然后有
+人就搬出了W3C的标准来，人家标准根本就没考虑到中文这个鸟问题，哥在想其实这对于英文的人来说这个事情
+是无可厚非的，英文打字可能大到最后一个单词换行下来所以两个单词之前如果要转换的话
+肯定是展示成空格要好点，所以这里我们就只能自己来修改一下markdown生成HTML的文件了
+。[这里][anotherguy]哥也找到另外一个哥们用[Octopress]的时候也发现了这个问题，
+可是哥用的是python的[markdown包][python_markdown_pkg]，所以哥就只能自己动手了。
+
+其实也没什么难的，就是在安装好的markdown包里面找到*markdown\blockprocessors.py*的
+文件，然后到里面写两个蹩脚的python函数，但是由于python好久没用了，可难为哥了，代
+码如下
+
+	class ParagraphProcessor(BlockProcessor):
+		...
+		...
+		p = util.etree.SubElement(parent, 'p')
+		p.text = fixChineseEOL(block.lstrip())
+
+	def joinFunc(match):
+		return (match.groups()[0] or '')+(match.groups()[1] or '')
+
+	def fixChineseEOL(s):
+		pat=u'([\u4e00-\u9fa5\u3002\uff0c\uff1b\uff01])\n| \
+			\n([\u4e00-\u9fa5\u3002\uff0c\uff1b\uff01])'
+		if type(s)==str:
+			u=s.decode("gbk")
+			u=re.sub(pat,joinFunc,u);
+			return u.encode("gbk")
+		elif type(s)==unicode:
+			return re.sub(pat,joinFunc,s)
+		return s
+
+
+代码比较简单，名字取的也很搓，但是基本上是可以用的，由于不想知道编码的问题，所以
+在gbk和unicode两种编码的模式下面都进行了处理。
+
+[stackoverflow]: http://stackoverflow.com/questions/8550112/prevent-browser-converting-n-between-lines-into-space-for-chinese-characters/8551033#8551033
+[Octopress]: http://www.octopress.org
+[anotherguy]: http://chenyufei.info/blog/2011-12-23/fix-chinese-newline-becomes-space-in-browser-problem/
+[python_markdown_pkg]: http://pypi.python.org/pypi/Markdown

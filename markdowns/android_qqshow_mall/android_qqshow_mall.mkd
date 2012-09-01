@@ -1,0 +1,157 @@
+==QQ秀商城Android APP项目源代码阅读
+
+首先从manifest文件入手，如下是[manifest.xml]文件的作用翻译。
+
+每个程序都在根目录有一个manifest文件，这个文件存放了一个程序在android
+系统上面运行需要的最基本的信息以及系统需要的信息来运行这个android程序
+里面的代码。除此之外，manifest文件还提供如下信息：
+
++ package name:android程序的命名，作为程序的唯一标识符
++ 描述了程序需要的组件，activites,services,broadcast receivers, content providers.
+  指定了每个组件对应的文件名字，并且指定了它们的能力，这些声明让android系统知道在
+  如何时候改如何调用这些组件
++ 决定组件在哪个进程中运行
++ 决定程序需要有哪些系统权限来访问API和与外部程序交互
++ 声明需要哪些权限来与程序的组件进行交互
++ 列出了在开发和测试的时候profile程序的类，在发布的时候会被移除
++ 声明了程序需要的最小的Android API
++ 列出了程序打包的时候需要链接的jar文件
+
+
+下面来看我们的manifest文件
+
+    <pre>
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.tencent.qqshow.mall"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="5" />
+    <uses-sdk android:targetSdkVersion="8" />
+    <uses-sdk android:maxSdkVersion="9" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/> 
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.SET_WALLPAPER" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.RESTART_PACKAGES" />
+	
+    <application android:icon="@drawable/logo" android:name="com.tencent.msf.login.BaseApplicationImpl" android:label="@string/app_name" >
+	<activity android:name="com.tencent.msf.login.QQshowMsfLogin" android:configChanges="keyboardHidden|orientation"
+			android:exported="true"  android:windowSoftInputMode="stateAlwaysHidden" >
+		</activity>
+   <activity android:name="com.tencent.qqshow.QQshowMallInit"
+			android:exported="true" android:launchMode="singleTop" 
+			android:screenOrientation="portrait" android:windowSoftInputMode="stateAlwaysHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name="com.tencent.qqshow.QQshowMallshow" android:screenOrientation="portrait"    
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:configChanges="keyboardHidden|orientation" android:exported="true" 
+			android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+		<activity android:name="com.tencent.qqshow.QQshowMallAppList" android:screenOrientation="portrait"    
+			android:exported="true" 
+			android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+		<activity android:name="com.tencent.qqshow.QQshowMallImage" android:screenOrientation="portrait"    
+			android:exported="true" android:configChanges="keyboardHidden|orientation"
+			android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+		<activity android:name="com.tencent.qqshow.QQshowMallList"    
+			android:exported="true"  android:configChanges="keyboardHidden|orientation" android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+	</application>
+</manifest>
+    </pre>
+    
++ package属性表示程序的唯一名字
++ use-sdk 表示支持的版本
++ uses-permission 需要的系统权限，在安装的时候会提示用户，我们这里的几个权限包括：
+  外部存储，文件系统，互联网，震动陀螺仪，电话状态，防睡，设置壁纸，重启程序包（已废弃）
++ application标签声明，icon表示程序图标，name表示在其它程序组件打开之前会启动的一个Application
+  类的实例，label表示程序的名字，包含的组件的默认名字
++ 一共定义另外五个activity，下面分别介绍
++ QQshowMsfLogin属性android:configChanges表示如果发送这两个配置变化的时候，不重启activity（默认）
+  而是会调用activity的onConfigChanged这个方法,exported表示是否可以被其它程序调用，windowSoftInputMode
+  决定两个事情，当这个activity激活的时候输入框是打开还是关闭，第二个就是activity是自己调整，让出一部分
+  空间给输入框还是一部分被输入框挡住，这个activity设置输入框一直隐藏。
++ QQshowMallInit，launchMode:激活的时候是否新建一个instance，singleTop表示如果这个activity在顶部就不创建
+  新的activity，否则就新建activity. screenOrientation:展示的方向，portrait表示高度比宽度要高。intent-filter
+  里面两个action.MAIN表示作为入口，不接受数据。category.LAUNCHER表示可以在启动页面里面列出来。
++ QQshowMallshow：android:style/Theme.NoTitleBar.Fullscreen表示全屏
+
+总体上面来说，还是比较简单。下面来看一下代码：
+
+com.tencent.base.tools
+
++ BaseFileDataControl
+    + 写数据到本地文件
+    + 从本地读一个数据文件
+    + 从一个drawable对象数据dump到一个文件
+    + 把一个byte[]数组转换为bitmap
+    + 把一个id映射到一个文件读出数据，然后生成一个drawable
+    + 判断是否有SD卡
+    + 判断是否SD卡能用
+    + 获取SD卡可用空间
+    + 获取SD卡总空间
+    + 
++ BaseImageControl
+    + 放大缩小bitmap
+    + 获取图片的路径/业务逻辑相关
+    + drawable转换为bitmap
+    + drawable缩放
+    + 获得带圆角图片的方法
+    + 获得带倒影的图片
+
++ BaseNetControl
+    + 通过URL获取一个输入流,http
+    + 通过URL获取一个BitMap
+    + 通过URL获取一个BitMap Drawable
+    + 检查网络连接状态
+    + checkNetworkFull
+    + goodNet
+    + sendPGV
+
++ BaseToolsControl
+    + Bitmap2Byte
+    + Bytes2Bitmap
+    + StringSplit
+    + intToString
+    + StringToInt
+
++ BaseUIControl
+    + alert 弹窗
+    + confirm 弹窗
+    + wait Process
+
+
++ BaseXmlControl
+    + getLocalXmlFile 通过URL读取xml的文件流
+
++ com.tencent.msf.login
+    + BaseApplicationImpl MSF需要实现的类
+    + ProtocolProxy 处理协议的pack和unpack，以及网络字节序列
+         + (ByteBuffer 可以用PutLong这种方式)
+         +  windows的字节序为低字节开头  
+         +  linux,unix的字节序为高字节开头  
+         +  java则无论平台变化，都是高字节开头 
+    
+    + QQshowMsfLogin
+    + 
+    
+
+
+
+
+[manifest.xml]:http://developer.android.com/guide/topics/manifest/manifest-intro.html
+[manifest.permission]:http://developer.android.com/reference/android/Manifest.permission.html
+[task.back.stack]:http://developer.android.com/guide/topics/fundamentals/tasks-and-back-stack.html

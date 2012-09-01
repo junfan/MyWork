@@ -1,0 +1,48 @@
+####activity要点
+
+一个activity A 打开 另外一个activity B的时候，是先调用A的onPause方法，然后调用
+B的onCreate, onStart, onResume方法，最后再调用B的onStop方法，如果Activity A需要
+保存数据让Activity B使用，那么就需要在onPause里面就保存
+
+配置变化的时候，android会重新创建当前的activyt(先onDestroy再onCreate)，所以需
+要程序能够很好地把握这种变化，需要在onSaveInstanceState和onRestoreInstanceState
+两个方法中保存和恢复activity当前的状态
+
+一般activity被pause或者stop之后，重新回到这个activity的时候，程序的状态是还在
+的，这是因为内存足够，系统不需要回收这些activity的内存，但是如果在内存不够的时候
+，这两个状态的activity是有可能会被回收的，所以就可能造成activity状态的丢失，这对
+于用户来说不是一个好的体验，系统会在销毁一个activity的时候调用
+onSaveInstanceState方法，它会传入一个Bundle对象，你可以使用putString和putInt等方
+法存储数据，如果程序到时候恢复的时候，它会把这个对象传入到onCreate以及
+onRestoreInstanceState这两个方法，如果你没有实现onSaveInstanceState这个方法，系
+统有默认的实现，就是把这个activity上面每个系统自带的UI控件都会有自己的方法来保存
+状态，前提就是每个widget都有一个唯一的id，正因为如此，如果你要保存除了widget自己
+存储的数据之外的数据，那么你最好先调用父类的onSaveInstanceState，然后再实现自己
+的逻辑，恢复的时候也是先调用负累的onRestoreInstanceState方法，再做其它的恢复操作
+。因为onSaveInstanceState方法不一定会调用，所以不能用来保存需要持久化的数据，持
+久化的数据需要在onPause里面保存，简单的测试写的方法是否有用，可以就转动手机，让
+横竖屏发生切换。
+
+生命周期方法解析：
+
++	onCreate:activity被创建
++	onStart: activity准备变成visible
++	onResume: activity已经变成visible了
++	onPause: 另外一个activity获取了焦点
++	onStop: activity不可见
++	onDestroy: activity被销毁了
+
+如何新建一个activity：创建一个activity的子类，然后实现onCreate方法，里面调用
+setContentView方法来设置activity的UI，使用onPause方法来保存需要持久化的数据。
+
+实现activity的UI：UI可以是一个View或者View Group，可以通过XML来声明，也可以直接
+用代码编写最后通过setContentView方法来设置作为activity的用户界面
+
+编写完activity之后并不能直接使用，还需要在AndroidManifest文件里面声明之后才可以
+调用。如何调用可以使用startActivity或者startActivityForResule方法，activity自己
+在自己里面调用finish结束自己。
+
+参考：
+[android-dev-activity]
+
+[android-dev-activity]:http://developer.android.com/guide/topics/fundamentals/activities.html

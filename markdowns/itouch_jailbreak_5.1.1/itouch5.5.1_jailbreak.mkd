@@ -1,0 +1,53 @@
+##itouch 5.1.1越狱
+
+####牢骚一下
+上次买的一个itouch别人之前越狱好了，但是发现版本好低，而且最近装了91助手之后发现
+好多应用没有图标了，我只能说91助手很烂，我android手机也是装了91助手之后出现手机
+不能安装程序了，就是老出现那个应用程序未安装，这对于我来说是不可忍受了，废话少说
+，进入正题
+
+####itouch 5.1.1越狱
+
+首先进入[absinthe]页面，然后选择自己机器的版本下载，
+
+- window下这个版本[absinthe-win]
+- mac下这个版本[absinthe-mac]
+- linux下这个版本[absinthe-linux]
+
+ps:国内网络环境较差，直接下貌似google地址被封掉了，哥只好从vps上面wget了一下
+	
+	wget -O absinthe.zip https://sites.google.com/site/greenpois0nabsinthe/
+	absinthe-win-2.0.1.zip?attredirects=0&d=1
+
+1.	把下载下来的zip文件解压缩到一个文件夹，比如absinthe
+2.	打开那个文件，windows上面会自动解压缩到当前文件夹一个目录absinthe-win-2.0.1，貌似是一个压缩文件
+3.	把itouch通过usb连到电脑上面
+4.	打开absinthe.exe程序，然后会跳出来一个欢迎的画面，然后提醒让备份好数据，还有
+	就是如果出问题人家也不管的声明:)
+5.	备份好数据之后就可以点击jailbreak这个按钮来进行越狱了
+6.	越狱需要点时间，看起来是在保存一个备份，别担心，在越狱成功之前不要动你的设备
+
+####越狱之后如何安装软件
+
+第一次越狱，越狱之后怎么办，怎么安装破解软件，我也在网上找了一下，大概过程是这样
+的。
+
+1.	打开cydia，点击下方管理，进入软件源，所谓的软件源就是相当于第三方的软件发布
+	站点为了能够让一些不能上架到appstore的软件以及一些破解的收费软件能够让用户下载的地方
+2.	点击右上的编辑，然后左边的按钮变成了添加，然后点击添加
+3.	在弹窗之后输入软件源的url地址，国内两大软件源分别是威锋源[http://apt.weiphone.com/]和第一中文源[http://apt.178.com]
+4.	这时候会弹出一个警告窗口，主要是让人意识到这种行为是有风险的，就像在网上安装
+	破解软件一样，可能被别人植入木马，所以这种情况下就要求相应的软件源来对收录的
+	软件进行质量保证了，所以这里点击仍然安装
+5.	然后会进入一个漫长的下载过程，这里主要是下载一下这个源上面有什么软件之类的，
+	安装完成之后就可以点击返回cydia就可以看到相应的源了，点进去就可以选择可以安
+	装的软件了
+
+
+
+[install-app-after]:http://hexdigi.jimdo.com/2012/02/26/iphone4%E8%B6%8A%E7%8B%B1%E5%90%8E%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6-%E4%B8%8A/
+[absinthe]:http://absinthejailbreak.org/download-absinthe-5-1-1-untethered-jailbreak/
+[absinthe-win]:https://sites.google.com/site/greenpois0nabsinthe/absinthe-win-2.0.1.zip?attredirects=0&d=1
+[absinthe-linux]:https://sites.google.com/site/greenpois0nabsinthe/absinthe-linux-2.0.1.tar.bz2?attredirects=0&d=1
+[absinthe-mac]:https://sites.google.com/site/greenpois0nabsinthe/absinthe-mac-2.0.1.dmg?attredirects=0&d=1
+
