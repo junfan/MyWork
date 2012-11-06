@@ -1,0 +1,16 @@
+##Android设计稿规范(建议)
+
+1.  字体使用android系统自带字体，这样才不会引起一些设计还原的差异
+2.  界面元素标识长，宽，高，留白，颜色(纯色的时候可以不用图片实现)
+3.  按钮给出三种状态，普通状态、按下状态以及focuse状态(兼容一些没有触屏的手机)，系统推荐使用颜色与光晕效果来反馈触摸
+4.  背景如果有渐变，请标明，开发同学机器上面可能对于一些不明显的渐变不敏感
+5.  不要做开发实现起来很复杂的设计，不大好还原，双方都劳心劳力
+6.  如果有动画效果，请把动画效果的多帧效果大概做出来，能让开发比较好理解
+7.  还有一个就是android的字体能否用尽量用系统默认的？自定义的字体不要超过太多，而且自定义的字体在android里面如果用在一个需要截断的textview的时候，截断的表现可能会出现异常（三个点出不来）
+8.  android 可触摸元素高度48dp，留白一般是8dp
+9.  字体大小考虑到可以放大缩小字体，四个字体大小12sp,14sp,16sp,18sp
+
+参考：
+[android 4.0 设计]:http://www.topfun.us/adchs/get-started/create-vistion.html
+[android按钮触摸反馈]:http://www.topfun.us/adchs/style/touch-feedback.html
+[android可触摸元素48dp(9mm)]:http://www.topfun.us/adchs/style/metrics-grids.html
